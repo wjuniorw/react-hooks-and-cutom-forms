@@ -46,7 +46,7 @@ export default function App() {
       ))}
       <p> :-)</p>
       <Form data={formShape} values={values} {...hook} errors={errors} />
-      <buttom onClick={() => getErrors()}> verify </buttom>
+      <button onClick={() => getErrors()}> verify </button>
     </div>
   );
 }
