@@ -23,7 +23,6 @@ const Input = props => {
 };
 
 const Form = ({ data, submit, values, onChange }) => {
-  // const { values, ...hook } = useFormValues({});
   return (
     <form>
       {data.map((it, i) => {
