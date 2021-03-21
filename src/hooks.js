@@ -117,7 +117,7 @@ const main = ({ state, actions, messages, scheme }) => {
         validations.forEach(v => {
           const valid = validationErrors[v](val);
           if (!valid) {
-            item = { ...item, [it]: { ...acc[it], [v]: errorMessages[v] } };
+            item = { ...item, [it]: { ...item[it], [v]: errorMessages[v] } };
           }
         });
         return item;
