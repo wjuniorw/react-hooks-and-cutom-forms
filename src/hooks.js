@@ -19,10 +19,12 @@ const validationErrors = {
     const valid = !!email.match(
       /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/
     );
-    console.log("valido? ==>", valid);
     return valid;
   },
-  name: value => true,
+  name: value => {
+    const valid = value.split(" ").length > 1;
+    return valid;
+  },
   password: value => {
     const valid = value.length < 8;
     return !valid;
@@ -32,7 +34,7 @@ const validationErrors = {
 const errorMessages = {
   required: "campo Obrigatorio!",
   email: "email invalido!",
-  name: "nome invalido!",
+  name: "digite seu nome completo!",
   password: "senha invalida!"
 };
 
@@ -74,6 +76,10 @@ const Input = props => {
         {...props}
         style={{ ...(!!errors ? styles.input_error : styles.input) }}
       />
+      {errors &&
+        Object.values(errors).map((it, i) => (
+          <strong style={{ color: "red" }}> * {it}</strong>
+        ))}
     </div>
   );
 };

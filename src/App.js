@@ -10,7 +10,7 @@ const formShape = [
     type: "text",
     required: true,
     placeholder: "nome...",
-    validations: ["required"]
+    validations: ["required", "name"]
   },
   {
     name: "email",
