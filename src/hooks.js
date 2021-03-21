@@ -59,8 +59,6 @@ const styles = {
   inputContainner: {}
 };
 
-export { useFormValues, useFormErrors, Form, Input };
-
 const main = ({ state, actions, messages, scheme }) => {
   // manage state of form...
   const useFormValues = initial => {
