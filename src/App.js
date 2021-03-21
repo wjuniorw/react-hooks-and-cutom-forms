@@ -25,7 +25,7 @@ const formShape = [
     type: "password",
     required: true,
     placeholder: "pass...",
-    label: "pass:",
+    label: "Password:",
     validations: ["password", "required"]
   }
 ];
@@ -35,7 +35,7 @@ const initial = { name: "", email: "", password: "" };
 export default function App() {
   const { values, ...hook } = useFormValues(initial);
   const { errors, getErrors } = useFormErrors(values, formShape);
-  useEffect(() => console.log(errors), [errors]);
+  useEffect(() => console.log("<===main comp. errors===>", errors), [errors]);
   return (
     <div>
       <h1>Building something cool!</h1>
@@ -45,7 +45,7 @@ export default function App() {
         </h4>
       ))}
       <p> :-)</p>
-      <Form data={formShape} values={values} {...hook} />
+      <Form data={formShape} values={values} {...hook} errors={errors} />
       <buttom onClick={() => getErrors()}> verify </buttom>
     </div>
   );

@@ -15,9 +15,18 @@ const useFormValues = initial => {
 
 const validationErrors = {
   required: value => !!value,
-  email: email => false,
+  email: email => {
+    const valid = !!email.match(
+      /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/
+    );
+    console.log("valido? ==>", valid);
+    return valid;
+  },
   name: value => true,
-  password: value => false
+  password: value => {
+    const valid = value.length < 8;
+    return !valid;
+  }
 };
 
 const errorMessages = {
@@ -45,6 +54,7 @@ const useFormErrors = (state, scheme) => {
       });
       return item;
     }, {});
+    console.log("<======getErrors objects====>", objects);
     setErrors(prev => ({ ...objects }));
   };
 
@@ -55,15 +65,20 @@ const useFormErrors = (state, scheme) => {
 };
 
 const Input = props => {
+  const { errors } = props;
   return (
     <div style={styles.inputContainner}>
       {props.label && <label for={`${props.name}`}> {props.label} </label>}
-      <input id={props.name} {...props} style={styles.input} />
+      <input
+        id={props.name}
+        {...props}
+        style={{ ...(!!errors ? styles.input_error : styles.input) }}
+      />
     </div>
   );
 };
 
-const Form = ({ data, submit, values, onChange }) => {
+const Form = ({ data, submit, values, onChange, errors }) => {
   return (
     <form>
       {data.map((it, i) => {
@@ -72,6 +87,7 @@ const Form = ({ data, submit, values, onChange }) => {
             {...it}
             onChange={e => onChange(e)}
             value={values[it.name]}
+            errors={errors[it.name]}
             key={i}
           />
         );
@@ -86,9 +102,17 @@ const styles = {
     marginTop: "5px",
     borderRadius: "5px",
     border: "solid",
-    borderWidth: "2px"
+    borderWidth: "2px",
+    borderColor: "#000000"
   },
-  error: { border: "solid", borderWidth: "2px", borderColor: "#ff0000" },
+  input_error: {
+    height: "20px",
+    marginTop: "5px",
+    borderRadius: "5px",
+    border: "solid",
+    borderWidth: "2px",
+    borderColor: "#ff0000"
+  },
   inputContainner: {}
 };
 
