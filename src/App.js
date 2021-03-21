@@ -38,7 +38,7 @@ const initial = { name: "", email: "", password: "" };
 // initial state = form state
 // actions = set of functions wich validates fields { email: value => !!value.match(...)}
 // messages = set of error messages { email: 'invalid email!' }
-// scheme = set of input descriptions [{ name: '', type: '', ... validations: ['required']}]
+// scheme = set of input descriptions [{ name: '', type: '', ... validations: ['email','required']}]
 const formConfig = {
   state: initial,
   actions: {},
