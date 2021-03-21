@@ -17,7 +17,7 @@ const formShape = [
   {
     name: "email",
     label: "Email:",
-    type: "text",
+    type: "email",
     required: true,
     placeholder: "email...",
     validations: ["email", "required"]
@@ -38,7 +38,7 @@ const initial = { name: "", email: "", password: "" };
 // initial state = form state
 // actions = set of functions wich validates fields { email: value => !!value.match(...)}
 // messages = set of error messages { email: 'invalid email!' }
-// scheme = set of input descriptions [{ name: '', type: '', ... validations: ['email','required']}]
+// scheme = set of input descriptions [{ name: 'email', type: 'email', ... validations: ['email','required']}]
 const formConfig = {
   state: initial,
   actions: {},

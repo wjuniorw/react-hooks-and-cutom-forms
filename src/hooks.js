@@ -12,7 +12,10 @@ const Input = props => {
       />
       {errors &&
         Object.values(errors).map((it, i) => (
-          <strong style={{ color: "red" }}> * {it}</strong>
+          <strong style={{ color: "red" }} key={i}>
+            {" "}
+            * {it}
+          </strong>
         ))}
     </div>
   );
