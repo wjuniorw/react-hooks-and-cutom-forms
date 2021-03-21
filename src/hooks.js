@@ -1,71 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
 
-const useFormValues = initial => {
-  const [values, setValues] = useState(initial);
-
-  const onChange = ({ target }) => {
-    const { name, value } = target;
-    setValues({ ...values, [name]: value });
-  };
-  return {
-    values,
-    onChange
-  };
-};
-
-const validationErrors = {
-  required: value => !!value,
-  email: email => {
-    const valid = !!email.match(
-      /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/
-    );
-    return valid;
-  },
-  name: value => {
-    const valid = value.split(" ").length > 1;
-    return valid;
-  },
-  password: value => {
-    const valid = value.length < 8;
-    return !valid;
-  }
-};
-
-const errorMessages = {
-  required: "campo Obrigatorio!",
-  email: "email invalido!",
-  name: "digite seu nome completo!",
-  password: "senha invalida!"
-};
-
-const useFormErrors = (state, scheme) => {
-  const [errors, setErrors] = useState({});
-
-  const getErrors = () => {
-    const fields = Object.keys(state);
-    const objects = fields.reduce((acc, it) => {
-      const val = state[it];
-      let item = { ...acc };
-      const { validations } = scheme.find(f => f.name === it);
-
-      validations.forEach(v => {
-        const valid = validationErrors[v](val);
-        if (!valid) {
-          item = { ...item, [it]: { ...acc[it], [v]: errorMessages[v] } };
-        }
-      });
-      return item;
-    }, {});
-    console.log("<======getErrors objects====>", objects);
-    setErrors(prev => ({ ...objects }));
-  };
-
-  return {
-    errors,
-    getErrors
-  };
-};
-
 const Input = props => {
   const { errors } = props;
   return (
@@ -123,3 +57,81 @@ const styles = {
 };
 
 export { useFormValues, useFormErrors, Form, Input };
+
+const main = ({ state, actions, messages, scheme }) => {
+  // manage state of form...
+  const useFormValues = initial => {
+    const [values, setValues] = useState(initial);
+    const onChange = ({ target }) => {
+      const { name, value } = target;
+      setValues({ ...values, [name]: value });
+    };
+    return {
+      values,
+      onChange
+    };
+  };
+
+  // actions validations...
+  const validationErrors = {
+    required: value => !!value,
+    email: email => {
+      const valid = !!email.match(
+        /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/
+      );
+      return valid;
+    },
+    name: value => {
+      const valid = value.split(" ").length > 1;
+      return valid;
+    },
+    password: value => {
+      const valid = value.length < 8;
+      return !valid;
+    },
+    ...actions
+  };
+
+  // errors error essages
+  const errorMessages = {
+    required: "campo Obrigatorio!",
+    email: "email invalido!",
+    name: "digite seu nome completo!",
+    password: "senha invalida!",
+    ...messages
+  };
+
+  // error handling...
+
+  const useFormErrors = (state, scheme) => {
+    const [errors, setErrors] = useState({});
+
+    const getErrors = () => {
+      const fields = Object.keys(state);
+      const objects = fields.reduce((acc, it) => {
+        const val = state[it];
+        let item = { ...acc };
+        const { validations } = scheme.find(f => f.name === it);
+
+        validations.forEach(v => {
+          const valid = validationErrors[v](val);
+          if (!valid) {
+            item = { ...item, [it]: { ...acc[it], [v]: errorMessages[v] } };
+          }
+        });
+        return item;
+      }, {});
+      console.log("<======getErrors objects====>", objects);
+      setErrors(prev => ({ ...objects }));
+    };
+
+    return {
+      errors,
+      getErrors
+    };
+  };
+
+  return { useFormValues, useFormErrors, Form, Input };
+};
+
+export default main;

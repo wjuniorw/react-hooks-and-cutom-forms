@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
 import "./style.css";
 
-import { useFormValues, Form, Input, useFormErrors } from "./hooks";
+// import { useFormValues, Form, Input, useFormErrors } from "./hooks";
+
+import useForm from "./hooks";
 
 const formShape = [
   {
@@ -31,8 +33,14 @@ const formShape = [
 ];
 
 const initial = { name: "", email: "", password: "" };
-
+const formConfig = {
+  state: initial,
+  actions: {},
+  messages: {},
+  scheme: formShape
+};
 export default function App() {
+  const { useFormValues, Form, Input, useFormErrors } = useForm(formConfig);
   const { values, ...hook } = useFormValues(initial);
   const { errors, getErrors } = useFormErrors(values, formShape);
   useEffect(() => console.log("<===main comp. errors===>", errors), [errors]);
