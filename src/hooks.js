@@ -13,6 +13,47 @@ const useFormValues = initial => {
   };
 };
 
+const validationErrors = {
+  required: value => !!value,
+  email: email => false,
+  name: value => true,
+  password: value => false
+};
+
+const errorMessages = {
+  required: "campo Obrigatorio!",
+  email: "email invalido!",
+  name: "nome invalido!",
+  password: "senha invalida!"
+};
+
+const useFormErrors = (state, scheme) => {
+  const [errors, setErrors] = useState({});
+
+  const getErrors = () => {
+    const fields = Object.keys(state);
+    const objects = fields.reduce((acc, it) => {
+      const val = state[it];
+      let item = { ...acc };
+      const { validations } = scheme.find(f => f.name === it);
+
+      validations.forEach(v => {
+        const valid = validationErrors[v](val);
+        if (!valid) {
+          item = { ...item, [it]: { ...acc[it], [v]: errorMessages[v] } };
+        }
+      });
+      return item;
+    }, {});
+    setErrors(prev => ({ ...objects }));
+  };
+
+  return {
+    errors,
+    getErrors
+  };
+};
+
 const Input = props => {
   return (
     <div style={styles.inputContainner}>
@@ -51,4 +92,4 @@ const styles = {
   inputContainner: {}
 };
 
-export { useFormValues, Form, Input };
+export { useFormValues, useFormErrors, Form, Input };

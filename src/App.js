@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "./style.css";
 
-import { useFormValues, Form, Input } from "./hooks";
+import { useFormValues, Form, Input, useFormErrors } from "./hooks";
 
 const formShape = [
   {
@@ -10,7 +10,7 @@ const formShape = [
     type: "text",
     required: true,
     placeholder: "nome...",
-    validations: []
+    validations: ["required"]
   },
   {
     name: "email",
@@ -18,7 +18,7 @@ const formShape = [
     type: "text",
     required: true,
     placeholder: "email...",
-    validations: ["email"]
+    validations: ["email", "required"]
   },
   {
     name: "password",
@@ -26,7 +26,7 @@ const formShape = [
     required: true,
     placeholder: "pass...",
     label: "pass:",
-    validations: ["password"]
+    validations: ["password", "required"]
   }
 ];
 
@@ -34,6 +34,8 @@ const initial = { name: "", email: "", password: "" };
 
 export default function App() {
   const { values, ...hook } = useFormValues(initial);
+  const { errors, getErrors } = useFormErrors(values, formShape);
+  useEffect(() => console.log(errors), [errors]);
   return (
     <div>
       <h1>Building something cool!</h1>
@@ -44,6 +46,7 @@ export default function App() {
       ))}
       <p> :-)</p>
       <Form data={formShape} values={values} {...hook} />
+      <buttom onClick={() => getErrors()}> verify </buttom>
     </div>
   );
 }
