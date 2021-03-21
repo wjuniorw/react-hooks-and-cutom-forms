@@ -4,23 +4,36 @@ import "./style.css";
 import { useFormValues, Form, Input } from "./hooks";
 
 const formShape = [
-  { name: "nome", type: "text", required: true, placeholder: "nome..." },
-  { name: "email", type: "text", required: true, placeholder: "email..." },
+  {
+    name: "name",
+    label: "Nome: ",
+    type: "text",
+    required: true,
+    placeholder: "nome...",
+    validations: []
+  },
+  {
+    name: "email",
+    label: "Email:",
+    type: "text",
+    required: true,
+    placeholder: "email...",
+    validations: ["email"]
+  },
   {
     name: "password",
     type: "password",
     required: true,
     placeholder: "pass...",
-    label: "pass:"
+    label: "pass:",
+    validations: ["password"]
   }
 ];
 
-const initial = { name: "" };
+const initial = { name: "", email: "", password: "" };
+
 export default function App() {
   const { values, ...hook } = useFormValues(initial);
-  useEffect(() => {
-    console.log(values);
-  }, [values]);
   return (
     <div>
       <h1>Building something cool!</h1>
@@ -30,9 +43,7 @@ export default function App() {
         </h4>
       ))}
       <p> :-)</p>
-      <Form data={formShape} values={values} {...hook}>
-        {/* <Input {...hook} /> */}
-      </Form>
+      <Form data={formShape} values={values} {...hook} />
     </div>
   );
 }
